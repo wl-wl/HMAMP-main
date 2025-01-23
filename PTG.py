@@ -37,7 +37,6 @@ if not os.path.exists(os.path.join(os.getcwd(),opt.save_path)):
         os.makedirs(os.path.join(os.getcwd(),opt.save_path))
 
 
-# tokens = ['?','<','>','#', '(', ')', '+', '-', '1', '2', '3', '4', '5', '6', '7', '8', '9', '=', 'B', 'C', 'F', 'H', 'I', 'N', 'O', 'S', '[', ']', 'c', 'l', 'n', 'o', 'r', 's']
 tokens = ['b', 'a', 'r', 'n', 'd', 'c', 'q', 'e', 'g', 'h', 'i', 'l', 'k', 'm', 'f', 'p', 's', 't', 'w', 'y', 'v', 'x',
           'z', 'u', 'j', 'o']
 
@@ -45,8 +44,7 @@ gen_data_path = os.path.join(os.getcwd(),'data','amp.txt')
 eval_data_path1 = os.path.join(os.getcwd(),'data','amp_b_2(mic).txt')
 eval_data_path2 = os.path.join(os.getcwd(),'data','hemo2.txt')
 
-# eval_data_path1 = os.path.join(os.getcwd(),'data','DRD2_valid.txt')
-# eval_data_path2 = os.path.join(os.getcwd(),'data','HTR1A_valid.txt')
+
 optimizer_instance = torch.optim.Adam
 
 # Load data from file
