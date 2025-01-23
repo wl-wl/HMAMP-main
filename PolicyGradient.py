@@ -52,7 +52,7 @@ parser.add_argument('--beta', action='store', default=0.3, type=int)
 parser.add_argument('--model_path', action='store', default='model_saved/PTG', type=str)
 parser.add_argument('--save_path', action='store', default='model_saved/PolicyGradient/RES',
                     type=str)
-parser.add_argument('--g_name', action='store', default='MLE_generator.pt', type=str)
+parser.add_argument('--g_name', action='store', default='PTG_generator.pt', type=str)
 parser.add_argument('--g_data_file', action='store', default='amp2.txt', type=str)
 parser.add_argument('--train_file_1', action='store', default='amp_b_2(mic).txt', type=str)
 parser.add_argument('--train_file_2', action='store', default='hemo2.txt', type=str)
