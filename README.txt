@@ -22,8 +22,9 @@ python 3.7
 pytorch 1.5.1 
 
 Pre-training a prior generator：PTG.py
-Train HMAMP framework: PolicyGradient.py
-
+Training HMAMP framework: PolicyGradient.py
+Genearting candidates: test.py
+obtaining Pareto Front: Hypervolume.py
 
 
 
