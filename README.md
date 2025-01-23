@@ -2,19 +2,12 @@
 
 
 HMAMP introduced a hypervolume-driven multi-objective generative model designed to simultaneously optimize multiple attributes of 
-
 antimicrobial peptides (AMPs), addressing the challenge of safe clinical usage of peptide antibiotics. HMAMP combined multiple 
-
 discriminator generative adversarial networks, reinforcement learning, gradient update strategies based on the hypervolume concept, non-
-
 dominated sorting to achieve the Pareto front, and a rapid screening mechanism based on knee-point identification. HMAMP not only 
-
 generated effective and diverse candidates that could balance multiple conflicting attributes but also offered an advanced rapid 
-
 candidate screening process. The final computational simulations and experimental analyses demonstrated that the candidates possessed 
-
 ideal physicochemical properties and functional structures, suggesting that HMAMP could significantly advance the discovery of peptide 
-
 antibiotics and their safe clinical application.
 
 
