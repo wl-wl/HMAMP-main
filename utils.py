@@ -14,7 +14,7 @@ rdBase.DisableLog('rdApp.error')
 
 ################ For data process ################
 
-def tokenize(smiles, tokens=None):
+def tokenize(peptides, tokens=None):
     word_index_dict = {'b': '0', 'a': '1', 'r': '2', 'n': '3', 'd': '4', 'c': '5', 'q': '6', 'e': '7', 'g': '8',
                        'h': '9', 'i': '10', 'l': '11', 'k': '12', 'm': '13', 'f': '14', 'p': '15', 's': '16', 't': '17',
                        'w': '18', 'y': '19', 'v': '20', 'x': '21', 'z': '22', 'u': '23', 'j': '24', 'o': '25'}
@@ -29,15 +29,15 @@ def tokenize(smiles, tokens=None):
 
 def read_peptides_from_file(filename, unique=True, add_start_end_tokens=False):
     """
-    Reads SMILES from file. File must contain one SMILES string per line
+    Reads peptides from file. File must contain one peptides string per line
     with \n token in the end of the line.
 
     Args:
         filename (str): path to the file
-        unique (bool): return only unique SMILES
+        unique (bool): return only unique peptides
 
     Returns:
-        smiles (list): list of SMILES strings from specified file.
+        peptides (list): list of peptide sequences from specified file.
         success (bool): defines whether operation was successfully completed or not.
 
     If 'unique=True' this list contains only unique copies.
@@ -103,9 +103,9 @@ class NLLLoss(nn.Module):
 
 
 
-def standardize_smiles(smiles, min_heavy_atoms=10, max_heavy_atoms=50,
+def standardize_peptides(peptides, min_heavy_atoms=10, max_heavy_atoms=50,
                        remove_long_side_chains=False, neutralise_charges=True):
-    mol = Chem.MolFromSmiles(smiles)
+    mol = Chem.MolFrompeptides(peptides)
     if mol and neutralise_charges:
         mol, _ = _neutraliseCharges(mol)
     if mol:
@@ -113,86 +113,86 @@ def standardize_smiles(smiles, min_heavy_atoms=10, max_heavy_atoms=50,
         rdmolops.SanitizeMol(mol)
         mol = rdmolops.RemoveHs(mol, implicitOnly=False, updateExplicitCount=False, sanitize=True)
     if mol and valid_size(mol, min_heavy_atoms, max_heavy_atoms, remove_long_side_chains):
-        return Chem.MolToSmiles(mol, isomericSmiles=False)
+        return Chem.MolTopeptides(mol, isomericpeptides=False)
     return None
 
 
-def standardize_smiles_list(smiles_list):
-    """Reads a SMILES list and returns a list of RDKIT SMILES"""
-    smiles_list = Parallel(n_jobs=-1, verbose=0)(delayed(standardize_smiles)(line) for line in smiles_list)
-    smiles_list = [smiles for smiles in set(smiles_list) if smiles is not None]
-    logging.debug("{} unique SMILES retrieved".format(len(smiles_list)))
-    return smiles_list
+def standardize_peptides_list(peptides_list):
+    """Reads a peptides list and returns a list of RDKIT peptides"""
+    peptides_list = Parallel(n_jobs=-1, verbose=0)(delayed(standardize_peptides)(line) for line in peptides_list)
+    peptides_list = [peptides for peptides in set(peptides_list) if peptides is not None]
+    logging.debug("{} unique peptides retrieved".format(len(peptides_list)))
+    return peptides_list
 
 
-def canonical_smiles(smiles):
+def canonical_peptides(peptides):
     """
-    Takes a SMILES string and returns its canonical SMILES.
+    Takes a peptides string and returns its canonical peptides.
 
     Parameters
     ----------
-    smiles:str
-         SMILES strings to convert into canonical format
+    peptides:str
+         peptides strings to convert into canonical format
 
     Returns
     -------
-    new_smiles: str
-         canonical SMILES and NaNs if SMILES string is invalid or
+    new_peptides: str
+         canonical peptides and NaNs if peptides string is invalid or
         unsanitized (when sanitize is True)
     """
     try:
-        return Chem.MolToSmiles(Chem.MolFromSmiles(smiles), isomericSmiles=False)
+        return Chem.MolTopeptides(Chem.MolFrompeptides(peptides), isomericpeptides=False)
     except:
         return None
 
 
 
 
-def randomSmiles(mol):
+def randompeptides(mol):
     mol.SetProp("_canonicalRankingNumbers", "True")
     idxs = list(range(0, mol.GetNumAtoms()))
     random.shuffle(idxs)
     for i, v in enumerate(idxs):
         mol.GetAtomWithIdx(i).SetProp("_canonicalRankingNumber", str(v))
-    return Chem.MolToSmiles(mol, isomericSmiles=False)
+    return Chem.MolTopeptides(mol, isomericpeptides=False)
 
 
 def smile_augmentation(smile, augmentation, max_len):
-    mol = Chem.MolFromSmiles(smile)
+    mol = Chem.MolFrompeptides(smile)
     s = set()
     for _ in range(10000):
-        smiles = randomSmiles(mol)
-        if len(smiles) <= max_len:
-            s.add(smiles)
+        peptides = randompeptides(mol)
+        if len(peptides) <= max_len:
+            s.add(peptides)
             if len(s) == augmentation:
                 break
     return list(s)
 
 
-def save_smiles_to_file(filename, smiles, unique=True):
+def save_peptides_to_file(filename, peptides, unique=True):
     """
-    Takes path to file and list of SMILES strings and writes SMILES to the specified file.
+    Takes path to file and list of peptides strings and writes peptides to the specified file.
 
         Args:
             filename (str): path to the file
-            smiles (list): list of SMILES strings
+            peptides (list): list of peptides strings
             unique (bool): parameter specifying whether to write only unique copies or not.
 
         Output:
             success (bool): defines whether operation was successfully completed or not.
        """
     if unique:
-        smiles = list(set(smiles))
+        peptides = list(set(peptides))
     else:
-        smiles = list(smiles)
+        peptides = list(peptides)
     f = open(filename, 'w')
-    for mol in smiles:
+    for mol in peptides:
         f.writelines([mol, '\n'])
     f.close()
     return f.closed
 
 
-def read_smiles_from_file(filename, unique=True, add_start_end_tokens=False):
+def read_peptides_from_file(filename, unique=True, add_start_end_tokens=False):
 
     f = open(filename, 'r')
     peptide = []
@@ -209,12 +209,12 @@ def fp2arr(fp):
     return arr
 
 
-def fp_array_from_smiles_list(smiles, radius=2, nbits=2048):
+def fp_array_from_peptides_list(peptides, radius=2, nbits=2048):
     mols = []
     fps = []
-    for smile in smiles:
+    for smile in peptides:
         try:
-            mol = Chem.MolFromSmiles(smile)
+            mol = Chem.MolFrompeptides(smile)
             mols.append(mol)
         except:
             pass
@@ -227,15 +227,15 @@ def fp_array_from_smiles_list(smiles, radius=2, nbits=2048):
     return fps
 
 
-def fingerprint(smiles, radius=2, nbits=2048):
+def fingerprint(peptides, radius=2, nbits=2048):
     """
-    Generates fingerprint for SMILES
-    If smiles is invalid, returns None
+    Generates fingerprint for peptides
+    If peptides is invalid, returns None
     Returns fingerprint bits
     Parameters:
-        smiles: SMILES string
+        peptides: peptides string
     """
-    mol = Chem.MolFromSmiles(smiles)
+    mol = Chem.MolFrompeptides(peptides)
     if mol is None:
         return None
     fingerprint = AllChem.GetMorganFingerprintAsBitVect(mol=mol, radius=radius, nBits=nbits)
@@ -244,20 +244,20 @@ def fingerprint(smiles, radius=2, nbits=2048):
 
 def scaffold(mol):
     """
-    Extracts a scafold from a molecule in a form of a canonic SMILES
+    Extracts a scafold from a molecule in a form of a canonic peptides
     """
     try:
         scaffold = Chem.Scaffolds.MurckoScaffold.GetScaffoldForMol(mol)
     except (ValueError, RuntimeError):
         return None
-    scaffold_smiles = Chem.MolToSmiles(scaffold)
-    if scaffold_smiles == '':
+    scaffold_peptides = Chem.MolTopeptides(scaffold)
+    if scaffold_peptides == '':
         return None
-    return scaffold_smiles
+    return scaffold_peptides
 
 
-def scaffolds(smiles_list):
-    mol_list = [Chem.MolFromSmiles(smile) for smile in smiles_list]
+def scaffolds(peptides_list):
+    mol_list = [Chem.MolFrompeptides(smile) for smile in peptides_list]
     mol_list = [mol for mol in mol_list if mol is not None]
 
     scaffold_list = [scaffold(mol) for mol in mol_list]
@@ -269,18 +269,18 @@ def scaffolds(smiles_list):
 
 def fragment(mol):
     """
-    fragment mol using BRICS and return smiles list
+    fragment mol using BRICS and return peptides list
     """
     fgs = Chem.AllChem.FragmentOnBRICSBonds(mol)
-    fgs_smi = Chem.MolToSmiles(fgs).split(".")
+    fgs_smi = Chem.MolTopeptides(fgs).split(".")
     return fgs_smi
 
 
-def fragments(smiles_list):
+def fragments(peptides_list):
     """
-    fragment list of smiles using BRICS and return smiles list
+    fragment list of peptides using BRICS and return peptides list
     """
-    mol_list = [Chem.MolFromSmiles(smile) for smile in smiles_list]
+    mol_list = [Chem.MolFrompeptides(smile) for smile in peptides_list]
     mol_list = [mol for mol in mol_list if mol is not None]
 
     fragments = Counter()
@@ -290,12 +290,12 @@ def fragments(smiles_list):
     return fragments
 
 
-def get_structures(smiles_list):
+def get_structures(peptides_list):
     fps = []
     frags = []
     scaffs = []
-    for smile in smiles_list:
-        mol = Chem.MolFromSmiles(smile)
+    for smile in peptides_list:
+        mol = Chem.MolFrompeptides(smile)
         fps.append(fingerprint(smile))
         frags.append(fragment(mol))
         scaffs.append(scaffold(mol))
@@ -324,20 +324,20 @@ def get_TanimotoSimilarity(sources_fps, target_fps, option="max"):
 
 
 ################ For train ################
-def valid_score(smiles):
+def valid_score(peptides):
     """
-    score a smiles , if  it is valid, score = 1 ; else score = 0
+    score a peptides , if  it is valid, score = 1 ; else score = 0
 
     Parameters
     ----------
-        smiles: str
-            SMILES strings
+        peptides: str
+            peptides strings
 
     Returns
     -------
         score: int 0 or 1
     """
-    mol = Chem.MolFromSmiles(smiles)
+    mol = Chem.MolFrompeptides(peptides)
     if mol is None:
         return 0
     else:
