@@ -98,7 +98,7 @@ if __name__ == '__main__':
     discriminator_2 = Discriminator(input_size=char_num, embed_size=opt.d_embed_size, hidden_size=opt.d_hidden_size,
                                     use_cuda=opt.use_cuda, dropout=opt.d_dropout, lr=opt.d_lr,
                                     optimizer_instance=torch.optim.Adam)
-    # fcd_model = load_ref_model()
+   
     # Load pretrained generator
     generator.load_model(os.path.join(os.getcwd(), opt.model_path, opt.g_name), map_location='cuda:0')
 
@@ -298,10 +298,7 @@ if __name__ == '__main__':
         truth_data_1, _ = read_peptides_from_file(truth_data_path_1)
         truth_data_2, _ = read_peptides_from_file(truth_data_path_2)
 
-        # random.shuffle(fake_data)
-        # dis_loader1.update(truth_data=None, fake_data=fake_data[0:len(truth_data_1)])
-        # random.shuffle(fake_data)
-        # dis_loader2.update(truth_data=None, fake_data=fake_data[0:len(truth_data_2)])
+  
         random.shuffle(fake_data)
         dis_loader1 = DiscriminatorData(truth_data=truth_data_1, fake_data=fake_data[0:len(truth_data_1)],
                                         tokens=tokens,
