@@ -103,22 +103,8 @@ class NLLLoss(nn.Module):
 
 
 
-def standardize_peptides(peptides, min_heavy_atoms=10, max_heavy_atoms=50,
-                       remove_long_side_chains=False, neutralise_charges=True):
-    mol = Chem.MolFrompeptides(peptides)
-    if mol and neutralise_charges:
-        mol, _ = _neutraliseCharges(mol)
-    if mol:
-        rdmolops.Cleanup(mol)
-        rdmolops.SanitizeMol(mol)
-        mol = rdmolops.RemoveHs(mol, implicitOnly=False, updateExplicitCount=False, sanitize=True)
-    if mol and valid_size(mol, min_heavy_atoms, max_heavy_atoms, remove_long_side_chains):
-        return Chem.MolTopeptides(mol, isomericpeptides=False)
-    return None
-
 
 def standardize_peptides_list(peptides_list):
-    """Reads a peptides list and returns a list of RDKIT peptides"""
     peptides_list = Parallel(n_jobs=-1, verbose=0)(delayed(standardize_peptides)(line) for line in peptides_list)
     peptides_list = [peptides for peptides in set(peptides_list) if peptides is not None]
     logging.debug("{} unique peptides retrieved".format(len(peptides_list)))
