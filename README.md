@@ -26,9 +26,9 @@ pytorch 1.5.1
 
 3.Genearting candidates: test.py
 
-4.obtaining Pareto Front: Hypervolume.py
+4.Obtaining Pareto Front: Hypervolume.py
 
-
+5.Knee-based screening: knee_point.py
 
 
 
