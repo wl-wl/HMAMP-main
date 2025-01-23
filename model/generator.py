@@ -144,7 +144,7 @@ class Generator(nn.Module):
         Parameters
         ----------
         inp: torch.tensor
-            input tensor that contains prefix string indices
+            input tensor that contains prefix sequence indices
 
         hidden: tuple(torch.tensor, torch.tensor)
             previous hidden state of the model. hidden is a tuple of hidden state and cell state
@@ -163,9 +163,9 @@ class Generator(nn.Module):
         output = self.decoder(output.view(1, -1))
         return output, next_hidden
 
-    def generate(self, dataloader, prime_str='', end_token='', predict_len=40, temperature=1):  # predict_len=150
+    def generate(self, dataloader, prime_str='', end_token='', predict_len=60, temperature=1): 
         """
-        Generates new string from the model distribution.
+        Generates new sequence from the model distribution.
 
         Parameters
         ----------
@@ -173,15 +173,15 @@ class Generator(nn.Module):
             stores information about the generator dataloader format such alphabet, etc
 
         prime_str: str (default '<')
-            prime string that will be used as prefix. Default value is just the
+            prime sequence that will be used as prefix. Default value is just the
             START_TOKEN
 
         end_token: str (default '>')
             when end_token is sampled from the model distribution,
             the generation of a new example is finished
 
-        predict_len: int (default 150)
-            maximum length of the string to be generated. If the end_token is
+        predict_len: int (default 60)
+            maximum length of the sequence to be generated. If the end_token is
             not sampled, the generation will be aborted when the length of the
             generated sequence is equal to predict_len
 
@@ -202,7 +202,7 @@ class Generator(nn.Module):
         new_sample = prime_str
         new_sample = ''
 
-        # Use priming string to "build up" hidden state
+        # Use priming sequence to "build up" hidden state
         for p in range(len(prime_str) - 1):
             _, hidden = self.forward(prime_input[p], hidden)
         # inp = prime_input[-1]
@@ -215,7 +215,7 @@ class Generator(nn.Module):
             probs = torch.softmax(output / temperature, dim=1)
             sampled_index = torch.multinomial(probs.view(-1), 1)[0].cpu().numpy()
 
-            # Add predicted character to string and use as next input
+            # Add predicted character to sequence and use as next input
             predicted_char = dataloader.all_characters[sampled_index]
             new_sample += predicted_char
             inp = dataloader.char_tensor(predicted_char)
@@ -231,10 +231,10 @@ class Generator(nn.Module):
         Parameters
         ----------
         inp: torch.tensor
-            tokenized training string from position 0 to position (seq_len - 1)
+            tokenized training sequence from position 0 to position (seq_len - 1)
 
         target:
-            tokenized training string from position 1 to position seq_len
+            tokenized training sequence from position 1 to position seq_len
 
         Returns
         -------
