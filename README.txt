@@ -17,9 +17,15 @@ ideal physicochemical properties and functional structures, suggesting that HMAM
 
 antibiotics and their safe clinical application.
 
+
+Requirement:
+
 CUDA 10.1 
 python 3.7 
 pytorch 1.5.1 
+
+
+Steps:
 
 Pre-training a prior generator：PTG.py
 Training HMAMP framework: PolicyGradient.py
