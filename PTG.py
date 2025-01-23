@@ -19,7 +19,7 @@ from dataset import GeneratorData
 parser = argparse.ArgumentParser(description='Training Parameter')
 parser.add_argument('--cuda', action='store', default = 0, type=int)
 parser.add_argument('--use_cuda', action='store', default = None, type=int)
-parser.add_argument('--save_path', action='store', default = 'model_saved/MLE', type=str)
+parser.add_argument('--save_path', action='store', default = 'model_saved/PTG', type=str)
 parser.add_argument('--layers',action='store',default = 2, type=int)
 parser.add_argument('--embed_size',action='store',default = 300, type=int)
 parser.add_argument('--hidden_size',action='store',default = 1024, type=int)
