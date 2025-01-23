@@ -20,10 +20,13 @@ pytorch 1.5.1
 
 ##Steps:
 
-Pre-training a prior generator：PTG.py
-Training HMAMP framework: PolicyGradient.py
-Genearting candidates: test.py
-obtaining Pareto Front: Hypervolume.py
+1.Pre-training a prior generator：PTG.py
+
+2.Training HMAMP framework: PolicyGradient.py
+
+3.Genearting candidates: test.py
+
+4.obtaining Pareto Front: Hypervolume.py
 
 
 
