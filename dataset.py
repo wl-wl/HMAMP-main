@@ -8,7 +8,7 @@ from utils import read_peptides_from_file, tokenize
 
 class GeneratorData(object):
     def __init__(self, training_data_path, tokens=None, start_token='<',
-                 end_token='>', max_len=40, use_cuda=None):  # max_len=150
+                 end_token='>', max_len=60, use_cuda=None): 
         """
         Constructor for the GeneratorData object.
 
@@ -31,7 +31,7 @@ class GeneratorData(object):
             special character that will be added to the end of every
             sequence and encode the sequence end.
 
-        max_len: int (default 150)
+        max_len: int (default 60)
             maximum allowed length of the sequences. All sequences longer than
             max_len will be excluded from the training data.
 
