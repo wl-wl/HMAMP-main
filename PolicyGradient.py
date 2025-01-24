@@ -279,15 +279,15 @@ if __name__ == '__main__':
 
         # Train the discriminator
         # generate fake data for discriminator
-        print('---------- Generating fake data for discriminator ...')
-        fake_data = []
-        num = 0
-        with torch.no_grad():
-            while (num < fake_data_len):
-                sample = generator.generate(gen_loader)
-                if len(sample)>10:
-                    fake_data.append(sample)
-                    num = num + 1
+        # print('---------- Generating fake data for discriminator ...')
+        # fake_data = []
+        # num = 0
+        # with torch.no_grad():
+        #     while (num < fake_data_len):
+        #         sample = generator.generate(gen_loader)
+        #         if len(sample)>10:
+        #             fake_data.append(sample)
+        #             num = num + 1
 
 
 
