@@ -1,4 +1,4 @@
-##HMAMP: Designing Highly Potent Antimicrobial Peptides Using a Hypervolume-Driven Multi-Objective Deep Generative Model
+## HMAMP: Designing Highly Potent Antimicrobial Peptides Using a Hypervolume-Driven Multi-Objective Deep Generative Model
 
 
 HMAMP introduced a hypervolume-driven multi-objective generative model designed to simultaneously optimize multiple attributes of 
@@ -11,14 +11,14 @@ ideal physicochemical properties and functional structures, suggesting that HMAM
 antibiotics and their safe clinical application.
 
 
-##Requirement:
+## Requirement:
 
 CUDA 10.1 
 python 3.7 
 pytorch 1.5.1 
 
 
-##Steps:
+## Steps:
 
 1.Pre-training a prior generator：PTG.py
 
